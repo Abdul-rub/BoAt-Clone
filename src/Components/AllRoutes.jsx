@@ -10,6 +10,7 @@ import Checkout from "./Payment/Checkout";
 import Otp from "./Payment/otp";
 import Payments from "./Payment/payments";
 import { ProductDetails } from "./ProductDetail/ProductPage";
+import ErrorPage from "../ErrorPage";
 
 export function AllRoutes() {
   return (
@@ -25,6 +26,7 @@ export function AllRoutes() {
         <Route path="/payments" element={<Payments />} />
         <Route path="/otp" element={<Otp />} />
         <Route path="allProducts" element={<ViewAll />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </div>
   );
