@@ -7,7 +7,7 @@ Here BoAt Clone
 ![BoAt-Clone1](https://github.com/Abdul-rub/BoAt-Clone/assets/70228714/ada45606-1fe0-41a9-b91e-44f119f14934)
 
 
-//Carousel Products
+//All Products
 ![BoAt-Clone2](https://github.com/Abdul-rub/BoAt-Clone/assets/70228714/5ba8c2f8-2d59-47f5-a779-263bf7a645c7)
 
 //Single Product Page
