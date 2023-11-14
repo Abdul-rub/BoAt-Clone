@@ -60,6 +60,8 @@ export function CartPopup({ show, setCartShow }) {
     setCartShow(!show);
   };
 
+  console.log(serverCartData)
+
   return (
     <Box>
       <Drawer
@@ -115,73 +117,77 @@ export function CartPopup({ show, setCartShow }) {
             )}
 
             <Box border={""}>
-              {serverCartData.map((item,i) => (
-              
-                  <div key={i}>
-                    <Flex alignItems={"center"} mb="5px" key={i}>
-                      <Image w="130px" src={item.product?.images[0]} alt={item.product?.images} />
-                      <Box w="100%" ml="10px">
-                        <Text fontWeight={"bold"} fontSize={"15px"} noOfLines={"1"}>
-                          {item.product?.title}
+              {serverCartData.map((item, i) => (
+
+
+
+                <div key={i}>
+                  <Flex alignItems={"center"} mb="5px" key={i}>
+                    <Image w="130px" src={item.product?.images[0]} alt={item.product?.images} />
+                    <Box w="100%" ml="10px">
+                      <Text fontWeight={"bold"} fontSize={"15px"} noOfLines={"1"}>
+                        {item.product?.title}
+                      </Text>
+                      <Flex gap="2rem">
+                        <Text ml="5px" fontWeight={"bold"} color={"red"}>
+                          RS. {item.product?.price}
                         </Text>
-                        <Flex gap="2rem">
-                          <Text ml="5px" fontWeight={"bold"} color={"red"}>
-                            RS. {item.product?.price}
-                          </Text>
-                          <Text textDecoration={"line-through"}>
-                            RS. {item.product?.strike_price}
-                          </Text>
-                        </Flex>
-                        <Flex ml="5px" mt="10px">
+                        <Text textDecoration={"line-through"}>
+                          RS. {item.product?.strike_price}
+                        </Text>
+                      </Flex>
+                      <Flex ml="5px" mt="10px">
+                        {item.quantity > 1 && (
                           <Button
-                            disabled={item.quantity === 1}
-                            onClick={async () => await handleQuantity(item.product._id, item.quantity-1 )}
+                            onClick={async () => await handleQuantity(item.product._id, item.quantity - 1)}
                             p="0"
-                            alignItems={"center"}
-                            fontSize={"18px"}
-                            justifyContent={"center"}
-                            textAlign={"center"}
-                            fontWeight={"1000"}
+                            alignItems="center"
+                            fontSize="18px"
+                            justifyContent="center"
+                            textAlign="center"
+                            fontWeight="1000"
                             color="red"
-                            size={"xs"}
-                            borderRadius={"50%"}
-                            border={"1px solid black"}
+                            size="xs"
+                            borderRadius="50%"
+                            border="1px solid black"
                             bg="white"
-                            pb={"2px"}
+                            pb="2px"
                           >
                             -
                           </Button>
-                          <Text p="0px 15px">{item.quantity}</Text>
-                          <Button
-                            disabled={item.quantity === 10}
-                            onClick={async () => await handleQuantity(item.product._id, item.quantity+1)}
-                            fontSize={"18px"}
-                            p="0"
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            textAlign={"center"}
-                            fontWeight={"1000"}
-                            color="red"
-                            size="xs"
-                            borderRadius={"50%"}
-                            border={"1px solid black"}
-                            bg="white"
-                            pb={"2px"}
-                          >
-                            +
-                          </Button>
-                          <Spacer />
-                          <FaTrashAlt
-                            onClick={() => removeFromCart(item.product?._id)}
-                            color="grey"
-                            cursor={"pointer"}
-                          />
-                        </Flex>
-                      </Box>
-                    </Flex>
-                    <Divider borderColor="black" />
-                  </div>
-        
+                        )}
+
+                        <Text p="0px 15px">{item.quantity}</Text>
+                        <Button
+                          disabled={item.quantity === 10}
+                          onClick={async () => await handleQuantity(item.product._id, item.quantity + 1)}
+                          fontSize={"18px"}
+                          p="0"
+                          justifyContent={"center"}
+                          alignItems={"center"}
+                          textAlign={"center"}
+                          fontWeight={"1000"}
+                          color="red"
+                          size="xs"
+                          borderRadius={"50%"}
+                          border={"1px solid black"}
+                          bg="white"
+                          pb={"2px"}
+                        >
+                          +
+                        </Button>
+                        <Spacer />
+                        <FaTrashAlt
+                          onClick={() => removeFromCart(item.product?._id)}
+                          color="grey"
+                          cursor={"pointer"}
+                        />
+                      </Flex>
+                    </Box>
+                  </Flex>
+                  <Divider borderColor="black" />
+                </div>
+
               ))}
             </Box>
           </DrawerBody>

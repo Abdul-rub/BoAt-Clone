@@ -179,7 +179,7 @@ export function ProductDetails() {
 
                   <Box mt={"20px"} textAlign={"center"}>
                     <Button
-                      onClick={() => addToCart(item._id)}
+                      onClick={() => addToCart(item)}
                       width={"100%"}
                       _hover={"none"}
                       p="0px 10px"

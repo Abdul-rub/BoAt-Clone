@@ -4,18 +4,17 @@ import React from "react";
 import { Container, Form } from "./LoginStyles";
 import { useToast } from "@chakra-ui/react";
 import { useAuth } from "../Context/AuthContext";
+import { useCart } from "../Context/CartContext";
 
 
 export function Login() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const { login, isLogin } = useAuth()
+  const {getCartDataFromServer}= useCart()
   const navigate = useNavigate();
   const toast = useToast();
 
 
-  // console.log(login, "LOGIN BABY")
-  // console.log(isLogin, "LOGIN BABY")
-  // console.log(logout, "LOGIN BABY")
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +40,11 @@ export function Login() {
       localStorage.setItem("authToken", responseData.token)
       localStorage.setItem("userName", responseData.user.username)
 
+      const storedData = JSON.parse(localStorage.getItem('credencial'));
+      const userId = storedData ? storedData._id : null;
+
       console.log(isLogin, "LOGIN BABY")
+      getCartDataFromServer(userId)
       // console.log(name , "USER NAME")
       
 

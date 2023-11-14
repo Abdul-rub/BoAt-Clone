@@ -17,7 +17,6 @@ const addToCart = async (req, res) => {
         if (existingCartItem) {
             existingCartItem.quantity += quantity;
         } else {
-            // Populate the product field before pushing to the cart
             const populatedProduct = await Product.findById(product._id);
             user.cart.push({ product: populatedProduct, quantity });
         }

@@ -17,10 +17,8 @@ export function SingleProductBox({
 }) {
 
 
-  const { cartData, addToCart, removeFromCart, handleQunatity,userId } = useCart();
-  const toast = useToast();
-
-  console.log(id,item, "SINGLE ID")
+  const {  addToCart } = useCart();
+  // console.log(id,item, "SINGLE ID")
 
   return (
     <>
@@ -38,7 +36,7 @@ export function SingleProductBox({
           boxSize={"-webkit-fit-content"}
           alignItems={"center"}
           _hover={{ cursor: "pointer" }}
-          onClick={() => addToCart(item._id)}
+          // onClick={() => addToCart(item._id)}
         >
           <Image m="auto" w="100%" h="100%" src={image} alt={name} />
         </Box>
@@ -57,7 +55,7 @@ export function SingleProductBox({
                 as={"b"}
                 textAlign={"left"}
                 _hover={{ cursor: "pointer" }}
-                onClick={() => addToCart(item)}
+                // onClick={() => addToCart(item)}
               >
                 {name}
               </Text>

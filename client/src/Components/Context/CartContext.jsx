@@ -43,17 +43,6 @@ export const CartProvider = ({ children }) => {
     };
 
 
-    // useEffect(() => {
-    //     const storedCartData = JSON.parse(localStorage.getItem('cartData'));
-    //     if (storedCartData) {
-    //       setCartData(storedCartData);
-    //     }
-    //   }, []);
-
-      // const saveCartDataToLocalStorage = (data) => {
-      //   localStorage.setItem('cartData', JSON.stringify(data));
-      // };
-    
 
     const handleToast = () => {
         toast({
@@ -68,7 +57,7 @@ export const CartProvider = ({ children }) => {
 
 
     const addToCartOnServer = async (product, userId) => {
-        // console.log(product, "GETTING FROM SNGLE")
+        console.log(userId, "GETTING USER ID")
         const response = await fetch('http://localhost:8000/product/addToCart', {
             method: 'POST',
             headers: {
@@ -185,17 +174,21 @@ const handleQuantity = async (productId, quantityChange) => {
 };
 
 //Handle Total
-      const getTotal = () => {
-        const total = serverCartData.reduce((acc, item) => {
-          return acc + item.product.price * item.quantity;
-        }, 0);
-    
-        return total;
-      };
-    
+  const getTotal = () => {
+  const total = serverCartData.reduce((acc, item) => {
 
-    // console.log(cartData, "CONTEXT DATA ")
-    // console.log(serverCartData.length, "LENGTH" )
+    if (item.product && item.product.price) {
+      return acc + item.product.price * item.quantity;
+    } else {
+
+      console.error('Invalid product structure:', item);
+      return acc; 
+    }
+  }, 0);
+
+  return total;
+};
+    
 
     return (
         <CartContext.Provider value={{

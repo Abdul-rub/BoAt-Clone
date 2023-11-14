@@ -47,13 +47,13 @@ export function SingleProductBox({
           border={"1px solid white"}
         >
           <Box textOverflow={"ellipsis"}>
-            <Link to="/productDetails">
+          <Link to={`/productDetails/${item._id}`}>
               <Text
                 noOfLines={1}
                 as={"b"}
                 textAlign={"left"}
                 _hover={{ cursor: "pointer" }}
-                onClick={() => addToCart(item)}
+                // onClick={() => addToCart(item)}
               >
                 {name}
               </Text>

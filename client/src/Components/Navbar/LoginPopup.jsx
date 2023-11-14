@@ -46,23 +46,23 @@ const LoginPopup = () => {
           {isLogin ? `Hi ${credData}!` : "Hi boAthead!"}
         </p>
         <Spacer />
-        <ImCross cursor={"pointer"}  size={13} />
+        <ImCross cursor={"pointer"} size={13} />
       </Flex>
       <Link to={isLogin ? "/" : "/login"}>
-      <Button
-        w={"100%"}
-        bg={"Tomato"}
-        color={"white"}
-        _hover={{ bg: "red" }}
-        onClick={isLogin ? () => { logout(); navigate("/"); } : null}
-        h={"35px"}
-        mb={"5px"}
-        fontSize="1.1rem"
-      >
-        {isLogin ? "Logout" : "Login"}
-      </Button>
-    </Link>
-     
+        <Button
+          w={"100%"}
+          bg={"Tomato"}
+          color={"white"}
+          _hover={{ bg: "red" }}
+          onClick={isLogin ? () => { logout(); navigate("/"); } : null}
+          h={"35px"}
+          mb={"5px"}
+          fontSize="1.1rem"
+        >
+          {isLogin ? "Logout" : "Login"}
+        </Button>
+      </Link>
+
     </Box>
   );
 };

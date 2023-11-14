@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import "../Styles/payment.css";
-import { useState } from "react";
+import { useAuth } from "../Context/AuthContext";
 
 const Checkout = () => {
-  const [userName, setUserName] = useState("");
+  const { addAddressData } = useAuth();
   const [address, setAddress] = useState("");
   const [number, setNumber] = useState("");
   const [state, setState] = useState("");
@@ -14,14 +14,39 @@ const Checkout = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const handleCheckOut = () => {
-    if (
-      userName === "" ||
-      address === "" ||
-      number === "" ||
-      state === "" ||
-      pincode === ""
-    ) {
+  const storedData = JSON.parse(localStorage.getItem('credencial'));
+  const userId = storedData ? storedData._id : null;
+
+  useEffect(() => {
+    const getAddress = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/auth/${userId}/getAddress`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const addressData = await response.json();
+        console.log(addressData.address, "USER ADDRESS");
+
+
+        setAddress(addressData.address.city || ""); 
+        setNumber(addressData.address.contactNumber || "");
+        setState(addressData.address.state || "");
+        setPincode(addressData.address.pincode || "");
+      } catch (error) {
+        console.error('Error fetching address:', error);
+      }
+    };
+
+    if (userId) {
+      getAddress();
+    }
+  }, [userId]);
+
+
+  const handleCheckOut = async () => {
+    if (address === "" || number === "" || state === "" || pincode === "") {
       toast({
         title: `Please fill all the information.`,
         status: "error",
@@ -30,14 +55,26 @@ const Checkout = () => {
         isClosable: true,
       });
     } else {
-      toast({
-        title: `Address Registered Successfully`,
-        status: "success",
-        duration: 2000,
-        position: "top",
-        isClosable: true,
-      });
-      navigate("/payments");
+      try {
+        await addAddressData(address, number, state, pincode, userId);
+        toast({
+          title: `Address Registered Successfully`,
+          status: "success",
+          duration: 2000,
+          position: "top",
+          isClosable: true,
+        });
+        navigate("/payments");
+      } catch (error) {
+        console.error("Error adding address:", error.message);
+        toast({
+          title: "Error adding address.",
+          status: "error",
+          duration: 2000,
+          position: "top",
+          isClosable: true,
+        });
+      }
     }
   };
   return (
@@ -46,16 +83,8 @@ const Checkout = () => {
         <Box className="checkoutHeadDiv">
           <h2 className="checkoutHead">Delivery Address</h2>
         </Box>
-        <label>UserName</label>
-        <input
-          type="text"
-          placeholder="Enter full username"
-          value={userName}
-          required
-          onChange={(e) => setUserName(e.target.value)}
-        />
 
-        <label>Address with City</label>
+        <label>City</label>
         <input
           type="text"
           placeholder="Enter your address"
