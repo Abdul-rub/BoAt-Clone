@@ -1,21 +1,35 @@
-const express = require('express')
-const connection = require("./connection/db")
-const cors = require("cors")
-const productrouter = require("./route/productsRoutes")
-const userrouter = require("./route/userRoutes")
+const express = require('express');
+const connection = require('./connection/db');
+// const Razorpay = require('razorpay');
+const cors = require('cors');
+const productrouter = require('./route/productsRoutes');
+const userrouter = require('./route/userRoutes');
+const paymentrouter = require('./route/paymentRoute');
 
+const app = express();
+app.use(express.json());
+app.use(cors());
 
+// const instance = new Razorpay({
+//   key_id: process.env.RAZORPAY_API_KEY,
+//   key_secret: process.env.RAZORPAY_API_SECRET,
+// });
 
-const app = express()
-app.use(express.json())
-app.use(cors())
+// module.exports.instance = instance;
+// module.exports = {
+//     app,
+//     instance, 
+//   };
+  
 
+// routes
+app.use('/product', productrouter);
+app.use('/auth', userrouter);
+app.use('/api', paymentrouter);
 
-//routes
-app.use("/product", productrouter)
-app.use("/auth",userrouter)
-
-
+app.get('/api/getkey', (req, res) => {
+  res.status(200).json({ key: [process.env.RAZORPAY_API_KEY] });
+});
 
 // const postProductsToDatabase = async () => {
 //     try {
@@ -29,19 +43,16 @@ app.use("/auth",userrouter)
 //     }
 //   };
 
-  // postProductsToDatabase()
+// postProductsToDatabase();
 
-//Connection
-
-app.listen(process.env.PORT || 8080,async(req,res)=>{
-    try {
-        await connection;
-        console.log("Connection Successfull")
-    } catch (error) {
-        console.log("connect to db failed")
-        console.log(error)
-    }
-    console.log(`listening to PORT ${process.env.PORT}`)
-})
-
-
+// Connection
+app.listen(process.env.PORT || 8080, async (req, res) => {
+  try {
+    await connection;
+    console.log('Connection Successful');
+  } catch (error) {
+    console.log('Connect to db failed');
+    console.log(error);
+  }
+  console.log(`Listening to PORT ${process.env.PORT}`);
+});
