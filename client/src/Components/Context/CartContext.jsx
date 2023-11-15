@@ -10,6 +10,7 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
     const [cartData, setCartData] = useState([]);
+    const [totalprice,setTotalPrice]=useState("")
     const [serverCartData, setServerCartData] = useState([]);
     const [singleProduct,setSingleProduct]= useState([])
     const toast = useToast();
@@ -185,7 +186,8 @@ const handleQuantity = async (productId, quantityChange) => {
       return acc; 
     }
   }, 0);
-
+ 
+  setTotalPrice(total)
   return total;
 };
     
@@ -201,7 +203,8 @@ const handleQuantity = async (productId, quantityChange) => {
           serverCartData,
           userId,
           getProductById,
-          singleProduct
+          singleProduct,
+          totalprice,
         }}>
             {children}
         </CartContext.Provider>

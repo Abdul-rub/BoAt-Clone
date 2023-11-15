@@ -3,6 +3,8 @@ import { Box, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import "../Styles/payment.css";
 import { useAuth } from "../Context/AuthContext";
+import { useCart } from "../Context/CartContext";
+import axios from "axios"
 
 const Checkout = () => {
   const { addAddressData } = useAuth();
@@ -13,6 +15,8 @@ const Checkout = () => {
 
   const navigate = useNavigate();
   const toast = useToast();
+  const {totalprice}= useCart()
+
 
   const storedData = JSON.parse(localStorage.getItem('credencial'));
   const userId = storedData ? storedData._id : null;
@@ -45,7 +49,48 @@ const Checkout = () => {
   }, [userId]);
 
 
-  const handleCheckOut = async () => {
+  //Payment 
+  const handleCheckout = async (amount) => {
+    const { data: { key } } = await axios.get("http://localhost:8000/api/getkey");
+
+    const { data: { order } } = await axios.post("http://localhost:8000/api/checkout", {
+      amount: amount,
+    });
+
+    const options = {
+      key,
+      amount: order.amount,
+      currency: "INR",
+      name: "Razorpay_Integration_Assignmnet",
+      description: "Simple Razorpay Integration",
+      image: "https://avatars.githubusercontent.com/u/70228714?s=400&u=e831da0977183e55eda8868ba6c80a7646e61dc8&v=4",
+      order_id: order.id,
+      callback_url: "http://localhost:8000/api/verifypayment",
+      prefill: {
+        name: "Abdul Rub",
+        email: "test01@example.com",
+        contact: "12345677"
+      },
+      notes: {
+        "address": "Razorpay Corporate Office"
+      },
+      theme: {
+        "color": "#121212"
+      }
+    };
+
+    const razor = new window.Razorpay(options);
+
+    razor.on("payment.failed", function (response) {
+      console.log(response.error);
+    });
+
+    razor.open();
+  };
+
+
+
+  const handleAddress = async () => {
     if (address === "" || number === "" || state === "" || pincode === "") {
       toast({
         title: `Please fill all the information.`,
@@ -64,7 +109,7 @@ const Checkout = () => {
           position: "top",
           isClosable: true,
         });
-        navigate("/payments");
+        // navigate("/payments");
       } catch (error) {
         console.error("Error adding address:", error.message);
         toast({
@@ -120,9 +165,10 @@ const Checkout = () => {
           onChange={(e) => setPincode(e.target.value)}
         />
 
-        <button className="checkoutBtn" onClick={handleCheckOut}>
+        <button className="checkoutBtn" onClick={handleAddress}>
           Submit
         </button>
+        <button className="checkoutBtn"  onClick={() => handleCheckout(totalprice)}>Make Payment of {totalprice} </button>
       </Box>
     </Box>
   );
